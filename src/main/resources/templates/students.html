@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Студенты</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+            color: #222;
+        }
+
+        .add-button {
+            display: inline-block;
+            background: #1677ff;
+            color: white;
+            padding: 12px 18px;
+            border-radius: 6px;
+            text-decoration: none;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 25px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background: #f3f4f6;
+        }
+
+        .edit {
+            color: #1677ff;
+        }
+
+        .delete-button {
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 8px 10px;
+            cursor: pointer;
+        }
+
+        .empty {
+            text-align: center;
+            color: #777;
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>Список студентов</h1>
+
+<p>Здесь отображаются записи, сохранённые в базе данных.</p>
+
+<a class="add-button" th:href="@{/students/new}">
+    + Добавить студента
+</a>
+
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Имя</th>
+        <th>Email</th>
+        <th>Действия</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr th:each="student : ${students}">
+        <td th:text="${student.id}"></td>
+        <td th:text="${student.name}"></td>
+        <td th:text="${student.email}"></td>
+
+        <td>
+            <a class="edit"
+               th:href="@{/students/edit/{id}(id=${student.id})}">
+                Редактировать
+            </a>
+
+            <form th:action="@{/students/delete/{id}(id=${student.id})}"
+                  method="post"
+                  style="display:inline"
+                  onsubmit="return confirm('Удалить эту запись?')">
+
+                <button class="delete-button" type="submit">
+                    Удалить
+                </button>
+            </form>
+        </td>
+    </tr>
+
+    <tr th:if="${#lists.isEmpty(students)}">
+        <td colspan="4" class="empty">
+            Записей пока нет. Добавьте первого студента!
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>
